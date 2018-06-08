@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
 from mother import *
-from ergodoxscraper import all_pattern_modifers, alternative_sec_keys, first_layer_keys_str
-from subprocess import check_output
 import word_detail
-
+from umihico_commons.xlsx_wrapper import load_xlsx
 file = ''
 
 
@@ -190,4 +188,3 @@ if __name__ == '__main__':
             combi(k, word)
     print(file)
     write(file, 'ahk.ahk')
-    # check_output("ahk.ahk", shell=True)

@@ -4,8 +4,12 @@ from traceback import format_exc
 import re
 
 
-def _only_alphabet(string):
-    return re.sub('[^0-9a-zA-Z]+', '', string)
+def is_alphabet(string):
+    return bool(string[0] == re.sub('[^a-zA-Z]+', '', string))
+
+
+def _only_alphabet_dot(string):
+    return re.sub('[^0-9a-zA-Z.]+', '', string)
 
 
 def main():
@@ -46,7 +50,6 @@ def _to_ahk_format(row):
 
 def _format_file():
     base_functions = '''
-    #MaxThreads 10
     longpress(key, longkey, waitkey)
     {
               KeyWait, % waitkey, T0.2
@@ -60,6 +63,16 @@ def _format_file():
             if ErrorLevel{
                         send, {BS}
                         return restkey
+            }
+    }
+    longpress_remap(key, restkey, waitkey)
+    {
+            KeyWait, % waitkey, T0.2
+            if ErrorLevel{
+                        send, {BS}
+                        return restkey
+            }else{
+                        return key
             }
     }
     combi(firstkey, secondkey, restkey)
@@ -104,8 +117,12 @@ def longpress(key, longkey):
         funcname = "longpress"
         longkey = longkey[1:]
     else:
-        funcname = "longpress_bs"
-    code = f'~{waitkey}::send, % {funcname}("{key}", "{longkey}", "{waitkey}")'
+        if is_alphabet(key[0]):
+            funcname = "longpress_bs"
+        else:
+            funcname = "longpress_remap"
+    childa = "~" if funcname != "longpress_remap" else ""
+    code = f'{childa}{waitkey}::send, % {funcname}("{key}", "{longkey}", "{waitkey}")'
     return code
 
 
@@ -114,7 +131,7 @@ def send(key, output):
 
 
 def hotstring(key, output):
-    key = _only_alphabet(key)[:40]
+    key = _only_alphabet_dot(key)[:40]
     return f'::{key}::{output}'
 
 

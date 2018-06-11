@@ -1,5 +1,4 @@
 
-    #MaxThreads 10
     longpress(key, longkey, waitkey)
     {
               KeyWait, % waitkey, T0.2
@@ -13,6 +12,16 @@
             if ErrorLevel{
                         send, {BS}
                         return restkey
+            }
+    }
+    longpress_remap(key, restkey, waitkey)
+    {
+            KeyWait, % waitkey, T0.2
+            if ErrorLevel{
+                        send, {BS}
+                        return restkey
+            }else{
+                        return key
             }
     }
     combi(firstkey, secondkey, restkey)
@@ -500,7 +509,7 @@
 ~r & t::send, % combi("r", "t", "ype")
 ::weights::we
 ~w & e::send, % combi("w", "e", "ights")
-::Pi::pi
+::Pi.::pi
 ~p & i::send, % combi_bs("p", "i", "Pi'.&@")
 ::permissions::pe
 ~p & e::send, % combi("p", "e", "rmissions")
@@ -1016,42 +1025,42 @@
 ~n & k::send, % combi("n", "k", "ern")
 ::lflags::lf
 ~l & f::send, % combi("l", "f", "lags")
-::cd::c.
+::cd..::c.
 ~c & .::send, % combi_bs("c", ".", "cd..")
 ::ifSpacenameSpaceSpaceSpacemainEscEnter::nm
 ~n & m::send, % combi_bs("n", "m", "if{Space}__name__{Space}=={Space}{Space}'__main__':{Esc}{Enter}")
 ::SpaceSpacecodingSpaceutf8SpaceEscEnterfr::um
 ~u & m::send, % combi_bs("u", "m", "#{Space}-*-{Space}coding:{Space}utf-8{Space}-*-{Esc}{Enter}from{Space}mother{Space}import{Space}*{Esc}{Enter}{Enter}if{Space}__name__{Space}=={Space}{Space}'__main__':")
 
-~0::send, % longpress_bs("0", "#2", "0")
+0::send, % longpress_remap("0", "#2", "0")
 
-~1::send, % longpress_bs("1", "#1", "1")
+1::send, % longpress_remap("1", "#1", "1")
 
-~2::send, % longpress_bs("2", "#4", "2")
+2::send, % longpress_remap("2", "#4", "2")
 
-~3::send, % longpress_bs("3", "#3", "3")
+3::send, % longpress_remap("3", "#3", "3")
 
-~4::send, % longpress_bs("4", "#6", "4")
+4::send, % longpress_remap("4", "#6", "4")
 
-~5::send, % longpress_bs("5", "#5", "5")
+5::send, % longpress_remap("5", "#5", "5")
 
-~6::send, % longpress_bs("6", "#8", "6")
+6::send, % longpress_remap("6", "#8", "6")
 
-~7::send, % longpress_bs("7", "#7", "7")
+7::send, % longpress_remap("7", "#7", "7")
 
-~9::send, % longpress_bs("9", "#9", "9")
+9::send, % longpress_remap("9", "#9", "9")
 
-~.::send, % longpress_bs(".", ",", ".")
+.::send, % longpress_remap(".", ",", ".")
 
-~'::send, % longpress_bs("'", "+2", "'")
+'::send, % longpress_remap("'", "+2", "'")
 
-~-::send, % longpress_bs("-", "=", "-")
+-::send, % longpress_remap("-", "=", "-")
 
-~[::send, % longpress_bs("[", "]", "[")
+[::send, % longpress_remap("[", "]", "[")
 
 ~{::send, % longpress("+[", "]", "{")
 
-~(::send, % longpress_bs("(", ")", "(")
+(::send, % longpress_remap("(", ")", "(")
 
 F22::\
 

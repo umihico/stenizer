@@ -1,119 +1,62 @@
 # -*- coding: utf-8 -*-
-from mother import *
-import word_detail
-from umihico_commons.xlsx_wrapper import load_xlsx
-file = ''
+from umihico_commons.csv_wrapper import load_csv
+from traceback import format_exc
+import re
 
 
-def append(sentence):
-    global file
-    file += sentence
-    file += '\n'
+def _only_alphabet(string):
+    return re.sub('[^0-9a-zA-Z]+', '', string)
 
 
-def longpress(key, longkey, adj=None):
-    # 1::send, % longpress("1", "#1", "1")
-    adj = adj if not adj is None else key
-    append('{2}::send, % longpress("{0}", "{1}", "{2}")'.format(key, longkey, adj))
-
-
-def longpresses(tuples):
-    for t in tuples:
-        if len(t) == 3:
-            key, longkey, adj = t
-            longpress(key, longkey, adj)
+def main():
+    _format_file()
+    steno_data = load_csv("steno_data.txt")[1:]
+    for row in steno_data:
+        try:
+            new_code = _to_ahk_format(row)
+        except (Exception, ) as e:
+            print(row)
+            print(format_exc())
         else:
-            key, longkey = t
-            longpress(key, longkey)
+            _write(new_code)
 
 
-def send(key, newkey):
-    append('{0}::send,{1}'.format(key, newkey))
-
-
-def sends(tuples):
-    [send(key, newkey) for key, newkey in tuples]
-
-
-def hotstring(key, newkey):
-    append('::{0}::{1}'.format(key, newkey))
-
-
-def remap_no_key_repeating(key, newkey):
-    append(r'''*aaaaa::
-    SetKeyDelay -1
-        Send {Blind}{bbbbb Down}
-    Return
-    *aaaaa up::
-    SetKeyDelay -1
-        Send {Blind}{bbbbb Up}
-    Return'''.replace('aaaaa', key).replace('bbbbb', newkey))
-
-
-def remap_no_key_repeatings(tuples):
-    [remap_no_key_repeating(key, newkey) for key, newkey in tuples]
-
-
-def remap(key, newkey):
-    append('{0}::{1}'.format(key, newkey))
-
-
-def remaps(tuples):
-    [remap(key, newkey) for key, newkey in tuples]
-
-
-def longpress2(key, word):
-    # ~a::send, % longpress2("a", "nd")
-    if word[0] == key[0]:
-        append('~{0}::send, % longpress2("{0}", "{1}")'.format(key, word[1:]))
+def _to_ahk_format(row):
+    try:
+        key, name, output, type_ = row
+    except (Exception, ) as e:
+        print(row)
+        raise
+    key = key.replace(':', 'vkBAsc028')
+    hotstring_code = ""
+    if type_ == "longpress":
+        conv_code = longpress(key, output)
+    elif type_ == "remap":
+        conv_code = remap(key, output)
+    elif type_ == "combination":
+        hotstring_code = hotstring(output, key)
+        conv_code = combi(key, output)
+    elif type_ == "send":
+        conv_code = send(key, output)
     else:
-        append('~{0}::send, % longpress2_bs("{0}", "{1}")'.format(key, word))
+        raise Exception(f"unknown type:{type_}")
+    code = '\n'.join([hotstring_code, conv_code])
+    return code
 
 
-# def longpress2s(tuples):
-#     [longpress2(key,word) for key,word in tuples]
-
-def combi(key, word):
-    # ~a & s::send, % combi("a", "s", "assert")
-    first_letter = key[0]
-    second_letter = key[1]
-    if key == word[:2]:
-        append('~{0} & {1}::send, % combi("{0}", "{1}", "{2}")'.format(
-            first_letter, second_letter, word[2:]))
-    else:
-        append('~{0} & {1}::send, % combi_bs("{0}", "{1}", "{2}")'.format(
-            first_letter, second_letter, word))
-
-
-if __name__ == '__main__':
-    word_detail_list = word_detail.word_detail_list
-    word_detail_list2 = list()
-    for t in word_detail_list:
-        if len(t) == 3:
-            word_detail_list2.append((t[0], t[1]))
-        else:
-            word_detail_list2.append((t[0], t[0] + t[1]))
-    word_detail = {x[0]: x[1] for x in word_detail_list2}
-
-    file = '''
-
-    longpress(key, longkey, purekey)
+def _format_file():
+    base_functions = '''
+    #MaxThreads 10
+    longpress(key, longkey, waitkey)
     {
-              KeyWait, % purekey, T0.15
-              if ErrorLevel
+              KeyWait, % waitkey, T0.2
+              if ErrorLevel{
                         return longkey
-              else
-                        return key
+              }
     }
-    longpress2(key, restkey)
+    longpress_bs(key, restkey, waitkey)
     {
-              KeyWait, % key, T0.3
-              if ErrorLevel
-                        return restkey
-    }
-    longpress2_bs(key, restkey)
-    {
-            KeyWait, % key, T0.3
+            KeyWait, % waitkey, T0.2
             if ErrorLevel{
                         send, {BS}
                         return restkey
@@ -138,53 +81,57 @@ if __name__ == '__main__':
             return restkey
         }
     }
+    #UseHook
     '''
-    append('#UseHook')
+    _write(base_functions, mode='w')
 
-    longpresses([(str(i), '#' + str(i)) for i in [1, 3, 5, 7, 9]])
-    longpresses([(str(i), '#' + str(i + 2)) for i in [0, 2, 4, 6]])
 
-    longpresses([
-        ('.', ', '),
-        ("'", '+2'),
-        ('-', ' = '),
-        ('[', ']'),
-        ('+[', '+]', '{'),
-        ('(', ')'), ])
-    remaps([
-        ('F22', '\\'),
-        ('F23', 'vkF3sc029'),
-        ('F16', '+'),
-        ('F17', '^]'),
-        ('F24', '_'),
-    ])
+def _write(new_code, mode='a'):
+    with open('ahk2.ahk', mode=mode) as f:
+        new_code_one_lines = new_code.split('\n')
+        for new_code_one_line in new_code_one_lines:
+            f.write(new_code_one_line)
+            f.write('\n')
 
-    sends([
-        ('F20', '{Space}<{Space}'),
-        ('F21', '{Space}>{Space}'),
-        # ("!'", "''''''{Left 3}"),
-        ("^'", '""""""{Left 3}'),
-        ('!(', '(x for x in )'),
-        ('![', '[x for x in ]'),
-        ('!{', '{Shift down}[{Shift up}k:v for k in {Shift down}]{Shift up}'),
-        ('!-', '{Space}{Shift down}1{Shift up}={Space}'),
-        ('^-', '{Space}=={Space}'),
-        ('!F20', '{Space}<={Space}'),
-        ('!F21', '{Space}>={Space}'),
-        ('F19', '{Ctrl down}v{Ctrl up}'),
-        ('F18', '{Ctrl down}c{Ctrl up}'), ])
 
-    stenodic = csv2dict('stenodic', list_of_dict=False)
-    print(stenodic)
-    stenodic = {k: stenodic[k] for k in stenodic if len(k) <= 2}
-    for k, word in stenodic.items():
-        k = k.replace(':', 'vkBAsc028')
-        hotstring(word, k)
-        if word in word_detail:
-            word = word_detail[word]
-        if len(k) == 1:
-            longpress2(k, word)
-        elif len(k) == 2:
-            combi(k, word)
-    print(file)
-    write(file, 'ahk.ahk')
+def longpress(key, longkey):
+    if key == "+[":
+        waitkey = "{"
+    else:
+        waitkey = key
+    if longkey[0] == key[0]:
+        # longkey = longkey[1:]1
+        funcname = "longpress"
+        longkey = longkey[1:]
+    else:
+        funcname = "longpress_bs"
+    code = f'~{waitkey}::send, % {funcname}("{key}", "{longkey}", "{waitkey}")'
+    return code
+
+
+def send(key, output):
+    return f'{key}::send,{output}'
+
+
+def hotstring(key, output):
+    key = _only_alphabet(key)[:40]
+    return f'::{key}::{output}'
+
+
+def remap(key, output):
+    return f'{key}::{output}'
+
+
+def combi(key, word):
+    first_letter = key[0]
+    second_letter = key[1]
+    if key == word[:2]:
+        funcname = "combi"
+        word = word[2:]
+    else:
+        funcname = "combi_bs"
+    return f'~{first_letter} & {second_letter}::send, % {funcname}("{first_letter}", "{second_letter}", "{word}")'
+
+
+if __name__ == '__main__':
+    main()

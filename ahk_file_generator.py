@@ -52,14 +52,14 @@ def _format_file():
     base_functions = '''
     longpress(key, longkey, waitkey)
     {
-              KeyWait, % waitkey, T0.2
+              KeyWait, % waitkey, T0.3
               if ErrorLevel{
                         return longkey
               }
     }
     longpress_bs(key, restkey, waitkey)
     {
-            KeyWait, % waitkey, T0.2
+            KeyWait, % waitkey, T0.3
             if ErrorLevel{
                         send, {BS}
                         return restkey
@@ -67,9 +67,8 @@ def _format_file():
     }
     longpress_remap(key, restkey, waitkey)
     {
-            KeyWait, % waitkey, T0.2
+            KeyWait, % waitkey, T0.3
             if ErrorLevel{
-                        send, {BS}
                         return restkey
             }else{
                         return key
@@ -100,7 +99,7 @@ def _format_file():
 
 
 def _write(new_code, mode='a'):
-    with open('ahk2.ahk', mode=mode) as f:
+    with open('ahk.ahk', mode=mode) as f:
         new_code_one_lines = new_code.split('\n')
         for new_code_one_line in new_code_one_lines:
             f.write(new_code_one_line)

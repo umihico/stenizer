@@ -52,14 +52,14 @@ def _format_file():
     base_functions = '''
     longpress(key, longkey, waitkey)
     {
-              KeyWait, % waitkey, T0.3
+              KeyWait, % waitkey, T0.25
               if ErrorLevel{
                         return longkey
               }
     }
     longpress_bs(key, restkey, waitkey)
     {
-            KeyWait, % waitkey, T0.3
+            KeyWait, % waitkey, T0.25
             if ErrorLevel{
                         send, {BS}
                         return restkey
@@ -67,7 +67,7 @@ def _format_file():
     }
     longpress_remap(key, restkey, waitkey)
     {
-            KeyWait, % waitkey, T0.3
+            KeyWait, % waitkey, T0.25
             if ErrorLevel{
                         return restkey
             }else{

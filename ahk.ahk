@@ -1,14 +1,14 @@
 
     longpress(key, longkey, waitkey)
     {
-              KeyWait, % waitkey, T0.3
+              KeyWait, % waitkey, T0.25
               if ErrorLevel{
                         return longkey
               }
     }
     longpress_bs(key, restkey, waitkey)
     {
-            KeyWait, % waitkey, T0.3
+            KeyWait, % waitkey, T0.25
             if ErrorLevel{
                         send, {BS}
                         return restkey
@@ -16,7 +16,7 @@
     }
     longpress_remap(key, restkey, waitkey)
     {
-            KeyWait, % waitkey, T0.3
+            KeyWait, % waitkey, T0.25
             if ErrorLevel{
                         return restkey
             }else{
@@ -91,7 +91,7 @@
 
 ~w::send, % longpress("w", "ith :", "w")
 
-~x::send, % longpress("x", "path(", "x")
+~x::send, % longpress("x", "path", "x")
 
 ~y::send, % longpress("y", "ield", "y")
 
@@ -108,8 +108,8 @@
 ~n & a::send, % combi("n", "a", "me")
 ::True::tr
 ~t & r::send, % combi_bs("t", "r", "True")
-::thisSpace::ts
-~t & s::send, % combi_bs("t", "s", "this{Space}")
+::this::ts
+~t & s::send, % combi_bs("t", "s", "this")
 ::data::da
 ~d & a::send, % combi("d", "a", "ta")
 ::False::fa
@@ -424,8 +424,8 @@
 ~u & n::send, % combi("u", "n", "der")
 ::x00::x0
 ~x & 0::send, % combi("x", "0", "0")
-::action::ac
-~a & c::send, % combi("a", "c", "tion")
+::application::ac
+~a & c::send, % combi_bs("a", "c", "application")
 ::host::ho
 ~h & o::send, % combi("h", "o", "st")
 ::xff::xf
@@ -564,8 +564,10 @@
 ~_ & i::send, % combi("_", "i", "d")
 ::ioerror::io
 ~i & o::send, % combi("i", "o", "error")
-::wsgi::ws
-~w & s::send, % combi("w", "s", "gi")
+::workbook::wb
+~w & b::send, % combi_bs("w", "b", "workbook")
+::worksheet::ws
+~w & s::send, % combi_bs("w", "s", "worksheet")
 ::bsd::bs
 ~b & s::send, % combi("b", "s", "d")
 ::nsamples::n_
@@ -620,8 +622,8 @@
 ~k & l::send, % combi("k", "l", "ass")
 ::cache::_c
 ~_ & c::send, % combi("_", "c", "ache")
-::luigi::lu
-~l & u::send, % combi("l", "u", "igi")
+::linux::lu
+~l & u::send, % combi_bs("l", "u", "linux")
 ::logger::_l
 ~_ & l::send, % combi("_", "l", "ogger")
 ::lhs::lh
@@ -630,8 +632,8 @@
 ~c & v::send, % combi("c", "v", "2")
 ::uwlines::uw
 ~u & w::send, % combi("u", "w", "lines")
-::gamma::ga
-~g & a::send, % combi("g", "a", "mma")
+::gitadd::ga
+~g & a::send, % combi_bs("g", "a", "git add")
 ::mypy::my
 ~m & y::send, % combi("m", "y", "py")
 ::backend::_b
@@ -698,8 +700,8 @@
 ~t & k::send, % combi("t", "k", "inter")
 ::zmq::zm
 ~z & m::send, % combi("z", "m", "q")
-::gpuarray::gp
-~g & p::send, % combi("g", "p", "uarray")
+::gitpull::gp
+~g & p::send, % combi_bs("g", "p", "git pull")
 ::okay::ok
 ~o & k::send, % combi("o", "k", "ay")
 ::ytrain::y_
@@ -878,8 +880,8 @@
 ~u & b::send, % combi("u", "b", "untu")
 ::fps::fp
 ~f & p::send, % combi("f", "p", "s")
-::dmatrix::dm
-~d & m::send, % combi("d", "m", "atrix")
+::dim::dm
+~d & m::send, % combi_bs("d", "m", "dim ")
 ::x90::x9
 ~x & 9::send, % combi("x", "9", "0")
 ::keys::_k
@@ -930,8 +932,8 @@
 ~k & h::send, % combi("k", "h", "tml")
 ::cbook::cb
 ~c & b::send, % combi("c", "b", "ook")
-::lng::ln
-~l & n::send, % combi("l", "n", "g")
+::long::ln
+~l & n::send, % combi_bs("l", "n", "long")
 ::illegal::il
 ~i & l::send, % combi("i", "l", "legal")
 ::xe8::xe
@@ -966,8 +968,8 @@
 ~b & m::send, % combi("b", "m", "p")
 ::kgriffs::kg
 ~k & g::send, % combi("k", "g", "riffs")
-::ghex::gh
-~g & h::send, % combi("g", "h", "ex")
+::github::gh
+~g & h::send, % combi_bs("g", "h", "github")
 ::pformat::pf
 ~p & f::send, % combi("p", "f", "ormat")
 ::iidx::i_

@@ -22,7 +22,7 @@ t	try	try:{Esc}{Enter}	longpress
 u	url	url	longpress
 v	value	value	longpress
 w	with	with :	longpress
-x	xpath	xpath(	longpress
+x	xpath	xpath	longpress
 y	yield	yield	longpress
 z	zip	zip	longpress
 th	the	the{Space}	combination
@@ -31,7 +31,7 @@ im	import	import{Space}	combination
 fr	first	first	combination
 na	name	name	combination
 tr	True	True	combination
-ts	this	this{Space}	combination
+ts	this	this	combination
 da	data	data	combination
 fa	False	False	combination
 pa	pass	pass{Enter}	combination
@@ -189,7 +189,7 @@ ba	base	base	combination
 or	org	org	combination
 un	under	under	combination
 x0	x00	x00	combination
-ac	action	action	combination
+ac	application	application	combination
 ho	host	host	combination
 xf	xff	xff	combination
 dt	dtype	dtype	combination
@@ -259,7 +259,8 @@ eq	equal	equal	combination
 gm	gmail	gmail	combination
 _i	_id	_id	combination
 io	ioerror	ioerror	combination
-ws	wsgi	wsgi	combination
+wb	workbook	workbook	combination
+ws	worksheet	worksheet	combination
 bs	bsd	bsd	combination
 n_	n_samples	n_samples	combination
 zo	zone	zone	combination
@@ -287,12 +288,12 @@ gs	gsm	gsm	combination
 oa	oauth	oauth	combination
 kl	klass	klass	combination
 _c	_cache	_cache	combination
-lu	luigi	luigi	combination
+lu	linux	linux	combination
 _l	_logger	_logger	combination
 lh	lhs	lhs	combination
 cv	cv2	cv2	combination
 uw	uwlines	uwlines	combination
-ga	gamma	gamma	combination
+ga	gitadd	git add	combination
 my	mypy	mypy	combination
 _b	_backend	_backend	combination
 cy	cython	cython	combination
@@ -326,7 +327,7 @@ _t	_type	_type	combination
 rn	rng	rng	combination
 tk	tkinter	tkinter	combination
 zm	zmq	zmq	combination
-gp	gpuarray	gpuarray	combination
+gp	gitpull	git pull	combination
 ok	okay	okay	combination
 y_	y_train	y_train	combination
 dy	dynamic	dynamic	combination
@@ -416,7 +417,7 @@ tb	tbl	tbl	combination
 x7	x74	x74	combination
 ub	ubuntu	ubuntu	combination
 fp	fps	fps	combination
-dm	dmatrix	dmatrix	combination
+dm	dim 	dim 	combination
 x9	x90	x90	combination
 _k	_keys	_keys	combination
 gy	gym	gym	combination
@@ -442,7 +443,7 @@ lb	lbrynet	lbrynet	combination
 xv	xval	xval	combination
 kh	khtml	khtml	combination
 cb	cbook	cbook	combination
-ln	lng	lng	combination
+ln	long	long	combination
 il	illegal	illegal	combination
 xe	xe8	xe8	combination
 _j	_json	_json	combination
@@ -460,7 +461,7 @@ gc	gca	gca	combination
 ql	qlabel	qlabel	combination
 bm	bmp	bmp	combination
 kg	kgriffs	kgriffs	combination
-gh	ghex	ghex	combination
+gh	github	github	combination
 pf	pformat	pformat	combination
 i_	i_idx	i_idx	combination
 xp	xproto	xproto	combination

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from umihico_commons.csv_wrapper import load_csv
+from umihico_commons.xlsx_wrapper import load_xlsx
 from traceback import format_exc
 import re
 
@@ -14,7 +14,7 @@ def _only_alphabet_dot(string):
 
 def main():
     _format_file()
-    steno_data = load_csv("steno_data.txt")[1:]
+    steno_data = load_xlsx("steno_data.xlsm")[1:]
     for row in steno_data:
         try:
             new_code = _to_ahk_format(row)
@@ -29,8 +29,11 @@ def _to_ahk_format(row):
     try:
         key, name, output, type_ = row
     except (Exception, ) as e:
-        print(row)
-        raise
+        try:
+            key, name, output, type_ = row
+        except (Exception, ) as e:
+            print(row)
+            raise
     key = key.replace(':', 'vkBAsc028')
     hotstring_code = ""
     if type_ == "longpress":
